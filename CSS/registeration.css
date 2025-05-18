@@ -1,0 +1,54 @@
+.registeration-main-container{
+    margin: auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+}
+.registeration-page-heading{
+    font-family: 'Archivo Black';
+    letter-spacing: 5%;
+    text-align: center;
+    font-size: 1.125rem;
+}
+
+.registeration-form-container{
+    border: solid 2px #000000 ;
+    background-color: #87AE73;
+    text-align: center;
+    padding: 0;
+    margin: 0;
+    width: 22.5rem;
+}
+.registeration-form-group{
+    display: flex;
+    flex-direction: column;
+    margin-top: 1rem;
+}
+.registeration-label{
+    font-family: 'Archivo Black';
+    letter-spacing: 5%;
+    margin-bottom: 0.5rem;
+}
+.registeration-form-inputfield{
+    height: 2rem;
+    text-align: center;
+}
+.registeration-form-inputfield::placeholder{
+    color: #000000;
+}
+.registeration-button{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 1rem auto;
+    border: solid 2px #000000 ;
+    border-radius: 0.4rem;
+    height: 2.1875rem;
+    width: 9.375rem;
+    background-color: #F25C05;
+    font-family: 'Archivo Black';
+    letter-spacing: 5%;
+
+}

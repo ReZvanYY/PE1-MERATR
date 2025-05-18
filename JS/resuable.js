@@ -3,11 +3,11 @@ const hamburgerMenuImg = document.querySelector('.hamburger-menu-img');
 const hamburgerMenu = document.querySelector('.hamburger-menu');
 const displayAreaMenu = document.getElementById('displayAreaMenu')
 
-const hamburgerMenuImgSrc = 'PUBLIC/icons/hamburger-menu.png';
-const hamburgerMenuClosingImgSrc = 'PUBLIC/icons/close-icon.png'
+const hamburgerMenuImgSrc = '../PUBLIC/icons/hamburger-menu.png';
+const hamburgerMenuClosingImgSrc = '../PUBLIC/icons/close-icon.png'
 
 function isLoggedIn(){
-    return localStorage.getItem('userToken') === 'true';
+    return localStorage.getItem('authorizationKey') === 'true';
 }
 function updateView (htmlMenuContent){
     if(!displayAreaMenu) return;
@@ -29,7 +29,7 @@ function updateMenuBasedOnStatus(){
             if(logOutLink){
                 logOutLink.addEventListener('click', event =>{
                     event.preventDefault();
-                    localStorage.removeItem('userToken');
+                    localStorage.removeItem('authorizationKey');
                     closeToggleMenu();
             });
         }
@@ -54,7 +54,7 @@ function openToggleMenu(){
 }
 
 function closeToggleMenu(){
-    displayAreaMenu.classList.remove("open");
+    displayAreaMenu.classList.remove('open');
     hamburgerMenuImg.src = hamburgerMenuImgSrc;   
 }
 
