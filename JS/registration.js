@@ -1,17 +1,17 @@
-const mainContainer = document.querySelector(".registeration-main-container");
+const mainContainer = document.querySelector(".registration-main-container");
 
 const formContainer = document.createElement("section");
-formContainer.className = "registeration-form-container";
+formContainer.className = "registration-form-container";
 
 const heading = document.createElement("h1");
-heading.textContent = "REGISTERATION";
-heading.className = "registeration-page-heading";
+heading.textContent = "registration";
+heading.className = "registration-page-heading";
 mainContainer.appendChild(heading);
 
 const form = document.createElement("form");
 form.action = "register";
-form.id = "registerationForm";
-form.className = "registeration-form";
+form.id = "registrationForm";
+form.className = "registration-form";
 formContainer.appendChild(form);
 
 const inputFields = [
@@ -31,35 +31,35 @@ const inputFields = [
   {
     label: "CONFIRM PASSWORD",
     type: "password",
-    placeholder: "COFIRM PASSWORD",
+    placeholder: "CONFIRM PASSWORD",
     id: "confirmPassword",
   },
 ];
 
 inputFields.forEach((field) => {
   const formGroup = document.createElement("div");
-  formGroup.className = "registeration-form-group";
+  formGroup.className = "registration-form-group";
 
   const label = document.createElement("label");
   label.setAttribute("for", field.id);
   label.textContent = field.label;
-  label.className = "registeration-label";
+  label.className = "registration-label";
   formGroup.appendChild(label);
 
   const input = document.createElement("input");
   input.type = field.type;
   input.placeholder = field.placeholder;
   input.id = field.id;
-  input.className = "registeration-form-inputfield";
+  input.className = "registration-form-inputfield";
   input.required = true;
   formGroup.appendChild(input);
 
   form.appendChild(formGroup);
 });
-const registerationButton = document.createElement("button");
-registerationButton.className = "registeration-button";
-registerationButton.textContent = "REGISTER";
-form.appendChild(registerationButton);
+const registrationButton = document.createElement("button");
+registrationButton.className = "registration-button";
+registrationButton.textContent = "REGISTER";
+form.appendChild(registrationButton);
 
 formContainer.appendChild(form);
 mainContainer.appendChild(formContainer);
@@ -86,8 +86,8 @@ function passwordValidation(password) {
 }
 
 //needed to create an basic authorization key, using email and name to not give away any sensitive information//
-function generateAuthorazationKey(email, name) {
-  const data = email + name;
+function generateAuthorizationKey(email, password) {
+  const data = email + password;
   return btoa(data);
 }
 
@@ -120,7 +120,7 @@ form.addEventListener("submit", function (event) {
     return;
   }
 
-  const postData = {
+  const registerData = {
     name: username,
     email: constantEmail,
     password: password,
@@ -130,7 +130,7 @@ form.addEventListener("submit", function (event) {
   fetch(applicationProgrammingInterface, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(postData),
+    body: JSON.stringify(registerData),
   })
     .then(async (response) => {
       if (!response.ok) {
@@ -145,7 +145,7 @@ form.addEventListener("submit", function (event) {
       return response.json();
     })
     .then((data) => {
-      successElement.textContent = "Registeration Successfull!";
+      successElement.textContent = "registration Successfull!";
       successElement.style.color = "lightgreen";
       errorElement.textContent = "";
       localStorage.setItem("authorazationKey", authorazationKey);

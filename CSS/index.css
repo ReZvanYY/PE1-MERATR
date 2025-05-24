@@ -1,9 +1,11 @@
 .blog-owner-introduction-box{
     display: flex;
     flex-direction: row;
+    justify-content: center;
     background-color: #87AE73;
     border: black solid 2px;
     border-radius: 6px;
+    width: max-content;
 }
 .blog-owner-img{
     width: 12.6875rem;
