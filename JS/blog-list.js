@@ -77,7 +77,7 @@ function renderPosts(posts) {
             editbtn.classList.add('edit-btn');
             editbtn.textContent = 'EDIT';
             editbtn.onclick = () => {
-                window.location.href = `../HTML/blog-post-specific.html?id=${post.id}`
+                window.location.href = `../HTML/edit-post-page.html?id=${post.id}`
             };
             
             const deletebtn = document.createElement('button');

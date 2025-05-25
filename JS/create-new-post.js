@@ -22,7 +22,7 @@ const getAuthHeaders = () => ({
 const form = document.querySelector('form');
 const titleInput = document.getElementById('postTitle');
 const bodyInput = document.getElementById('bodyText');
-const imageUrlInput = document.getElementById('thumbnailImage');
+const imageUrlInput = document.getElementById('img');
 
 
 form.addEventListener('submit', async (e) => {
@@ -62,7 +62,7 @@ form.addEventListener('submit', async (e) => {
 
     alert('Post created successfully!');
     form.reset();
-    window.location.href = '../HTML/blog-feed-post.html';
+    window.location.href = '../HTML/blog-list.html';
   } catch (err) {
     console.error('Unexpected error:', err);
     alert('An unexpected error occurred. Please try again.');
