@@ -1,4 +1,4 @@
-.registeration-main-container{
+.registration-main-container{
     margin: auto;
     display: flex;
     flex-direction: column;
@@ -6,14 +6,14 @@
     align-items: center;
     width: 100%;
 }
-.registeration-page-heading{
+.registration-page-heading{
     font-family: 'Archivo Black';
     letter-spacing: 5%;
     text-align: center;
     font-size: 1.125rem;
 }
 
-.registeration-form-container{
+.registration-form-container {
     border: solid 2px #000000 ;
     background-color: #87AE73;
     text-align: center;
@@ -21,24 +21,24 @@
     margin: 0;
     width: 22.5rem;
 }
-.registeration-form-group{
+.registration-form-group{
     display: flex;
     flex-direction: column;
     margin-top: 1rem;
 }
-.registeration-label{
+.registration-label{
     font-family: 'Archivo Black';
     letter-spacing: 5%;
     margin-bottom: 0.5rem;
 }
-.registeration-form-inputfield{
+.registration-form-inputfield{
     height: 2rem;
     text-align: center;
 }
-.registeration-form-inputfield::placeholder{
+.registration-form-inputfield::placeholder{
     color: #000000;
 }
-.registeration-button{
+.registration-button{
     display: flex;
     justify-content: center;
     align-items: center;
@@ -50,5 +50,9 @@
     background-color: #F25C05;
     font-family: 'Archivo Black';
     letter-spacing: 5%;
+}
+.registration-button:hover{
+        background-color: #FF751D;
+        cursor: pointer;
 
 }

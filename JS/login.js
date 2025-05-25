@@ -8,11 +8,18 @@ heading.textContent = "LOG IN";
 heading.className = "login-page-heading";
 mainContainer.appendChild(heading);
 
+const logInLogo = document.createElement('img');
+logInLogo.src = "https://i.imghippo.com/files/orvl6337mAc.png";
+logInLogo.alt = "Log in Page foodie heaven logo, on a sage green background."
+logInLogo.className = "log-in-logo";
+formContainer.appendChild(logInLogo)
+
 const form = document.createElement("form");
 form.action = "login";
 form.id = "loginForm";
 form.className = "login-form";
 formContainer.appendChild(form);
+
 
 const inputFields = [
   {
@@ -64,31 +71,26 @@ const errorElement = document.createElement("div");
 errorElement.className = "error-message";
 formContainer.appendChild(errorElement);
 
-const successElement = document.createElement("div");
-successElement.className = "success-message";
-formContainer.appendChild(successElement);
-
 function emailValidation(email) {
-  const emailRegex = /^[^\s@]+@stud\.noroff\.no$/;
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   return emailRegex.test(email);
 }
 
 form.addEventListener("submit", function (e) {
   e.preventDefault();
-  successElement.textContent = "";
   errorElement.textContent = "";
 
-  const constantEmail = form.email.value.trim().toLowerCase();
+  const email = form.email.value.trim().toLowerCase();
   const password = form.password.value;
 
-  if (!constantEmail) {
+  if (!email) {
     errorElement.style.color = "red";
     errorElement.textContent = "Please enter your E-mail";
     return;
   }
-  if (!emailValidation(constantEmail)) {
+  if (!emailValidation(email)) {
     errorElement.style.color = "red";
-    errorElement.textContent = "Please enter @stud.noroff.no E-Mail";
+    errorElement.textContent = "Please enter a valid email";
     return;
   }
   if (!password) {
@@ -98,8 +100,8 @@ form.addEventListener("submit", function (e) {
   }
 
   const logInData = {
-    email: constantEmail,
-    password: password,
+    email,
+    password,
   };
 
   fetch(signInAPIUrl, {
@@ -108,20 +110,17 @@ form.addEventListener("submit", function (e) {
     body: JSON.stringify(logInData),
   })
     .then(async (response) => {
+      const result = await response.json();
       if (!response.ok) {
-        const results = await response.json();
-        console.error("ERROR Response", results);
-        throw new Error(results.message || "Log in failed.");
+        console.error("ERROR Response", result);
+        throw new Error(result.message || "Log in failed.");
       }
-      return await response.json();
+      return result;
     })
     .then((data) => {
-      successElement.textContent = "Log in Successful!";
-      successElement.style.color = "Black";
-
-      localStorage.setItem("authorizationKey", data.authorizationKey);
-      localStorage.setItem("user", JSON.stringify(data.data));
-
+      localStorage.setItem("authKey", data.data.accessToken);
+      localStorage.setItem("userName", data.data.name);
+      form.reset();
       window.location.href = "../index.html";
     })
     .catch((error) => {

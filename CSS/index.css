@@ -2,6 +2,8 @@
     display: flex;
     flex-direction: row;
     justify-content: center;
+    margin: auto;
+    max-width: 55rem;
     background-color: #87AE73;
     border: black solid 2px;
     border-radius: 6px;
@@ -15,6 +17,7 @@
 .blog-owner-introduction-textbox{
     display: flex;
     flex-direction: column;
+    justify-content: center;
     text-align: center;
     font-size: 1rem;
 }
@@ -30,4 +33,87 @@
     display: grid;
     grid-template-columns: repeat(2,1fr);
 
+}
+.carousel-section-container{
+    display: flex;
+    justify-content: center;
+    text-align: center;
+    margin: auto;
+    overflow: hidden;
+    width: 80%;
+}
+
+.carousel-track {
+  width: 100%;
+  display: flex;
+  transform: translateX(0%);
+  transition: transform 0.4s ease-in-out;
+}
+.carousel-slide {
+  flex: 0 0 100%;
+}
+a{
+    text-decoration: none;
+    color: black;
+}
+.carousel-img{
+    width: 60%;
+    height: 20rem;
+    border: solid black 2px;
+    border-radius: 1rem;
+    margin-bottom: 1rem;
+}
+.carousel-title{
+    font-family: 'Archivo Black';
+    letter-spacing: 5%;
+    text-decoration: none;
+    color: black;
+}
+.background-for-text{
+    display: flex;
+    justify-content: center;
+    margin: auto;
+    border: solid #F25C05 2px;
+    background-color: #F25C05;
+    border-radius: 1rem;
+    width: 20rem;
+}
+.postcard-overall-container{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    margin: auto;
+    max-width: 25rem;
+     border-radius: 1rem;
+
+}
+.postcard-title-background{
+    display: flex;
+    justify-content: center;
+    background-color: #F25C05;
+    width: 25rem;
+     border-radius: 1rem;
+     margin-top: 1rem;
+}
+.postcard-title{
+        font-family: 'Archivo Black';
+    letter-spacing: 5%;
+    text-decoration: none;
+    color: black;
+}
+.postcard-img-container{
+    display: flex;
+    justify-content: center;
+    width: 25rem;
+    height: 15rem;
+     border-radius: 1rem;
+}
+.postcard-img{
+    width: 35rem;
+    margin-top: -1rem;
+    z-index: -1;
+     border-radius: 1rem;
+     margin-bottom: 1rem;
 }

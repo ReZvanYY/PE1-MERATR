@@ -4,7 +4,7 @@ const formContainer = document.createElement("section");
 formContainer.className = "registration-form-container";
 
 const heading = document.createElement("h1");
-heading.textContent = "registration";
+heading.textContent = "REGISTRATION";
 heading.className = "registration-page-heading";
 mainContainer.appendChild(heading);
 
@@ -13,6 +13,12 @@ form.action = "register";
 form.id = "registrationForm";
 form.className = "registration-form";
 formContainer.appendChild(form);
+
+const registerLogo = document.createElement('img');
+registerLogo.src = "https://i.imghippo.com/files/orvl6337mAc.png";
+registerLogo.alt = "Register Page foodie heaven logo, on a sage green background."
+registerLogo.className = "register-logo";
+formContainer.appendChild(registerLogo)
 
 const inputFields = [
   { label: "NAME", type: "text", placeholder: "NAME", id: "name" },
@@ -23,7 +29,7 @@ const inputFields = [
     id: "email",
   },
   {
-    label: "PASSWORD", 
+    label: "PASSWORD",
     type: "password",
     placeholder: "ENTER WANTED PASSWORD",
     id: "password",
@@ -56,6 +62,7 @@ inputFields.forEach((field) => {
 
   form.appendChild(formGroup);
 });
+
 const registrationButton = document.createElement("button");
 registrationButton.className = "registration-button";
 registrationButton.textContent = "REGISTER";
@@ -64,8 +71,8 @@ form.appendChild(registrationButton);
 formContainer.appendChild(form);
 mainContainer.appendChild(formContainer);
 
-const applicationProgrammingInterface =
-  "https://v2.api.noroff.dev/auth/register";
+const registerationAPI = "https://v2.api.noroff.dev/auth/register";
+const loginAPI = "https://v2.api.noroff.dev/auth/register";
 
 const errorElement = document.createElement("div");
 errorElement.className = "error-message";
@@ -80,36 +87,24 @@ function emailValidation(email) {
   return emailRegex.test(email);
 }
 
-function passwordValidation(password) {
-  const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[A-Za-z\d]{8,}$/;
-  return passwordRegex.test(password);
-}
-
-//needed to create an basic authorization key, using email and name to not give away any sensitive information//
-function generateAuthorizationKey(email, password) {
-  const data = email + password;
-  return btoa(data);
-}
-
 form.addEventListener("submit", function (event) {
   event.preventDefault();
   errorElement.textContent = "";
+  errorElement.style.color = "";
   successElement.textContent = "";
 
-  //only allows first name//
-  const username = form.name.value.trim();
-  const constantEmail = form.email.value.trim().toLowerCase();
+  const email = form.email.value.trim().toLowerCase();
   const password = form.password.value;
   const confirmPassword = form.confirmPassword.value;
-  const authorazationKey = generateAuthorazationKey(constantEmail, username);
+  const userName = email.split("@")[0];
 
-  if (!constantEmail) {
+  if (!email) {
     errorElement.textContent = "Please enter a valid E-Mail";
     errorElement.style.color = "red";
     return;
   }
 
-  if (!emailValidation(constantEmail)) {
+  if (!emailValidation(email)) {
     errorElement.textContent = "Please enter a valid E-Mail";
     errorElement.style.color = "red";
     return;
@@ -121,41 +116,46 @@ form.addEventListener("submit", function (event) {
   }
 
   const registerData = {
-    name: username,
-    email: constantEmail,
-    password: password,
-    confirmPassword: confirmPassword,
+    name: userName,
+    email,
+    password,
+    confirmPassword,
   };
 
-  fetch(applicationProgrammingInterface, {
+  fetch(registerationAPI, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(registerData),
   })
     .then(async (response) => {
       if (!response.ok) {
-        const failuredata = await response.json();
-        console.log(failuredata);
-        console.error("ERROR Response", failuredata);
+        const result = await response.json();
+        console.log(result);
+        console.error("ERROR Response", result);
         throw new Error(
-          failuredata.message ||
-            "Registration failed. Please check your input and try again."
-        );
+          result.message ||
+            "registration failed. Please check your input and try again.");
       }
-      return response.json();
+      return result;
     })
-    .then((data) => {
-      successElement.textContent = "registration Successfull!";
-      successElement.style.color = "lightgreen";
-      errorElement.textContent = "";
-      localStorage.setItem("authorazationKey", authorazationKey);
+    .then(() => {
+    return fetch(loginAPI, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email, password }),
+    });
+    })
+    .then ((res) => res.json())
+    .then ((loginData) =>{
+      localStorage.setItem("authKey", loginData.data.accessToken);
+      localStorage.setItem("userName", loginData.data.name);
+      successElement.textContent = "Register and login is successfully"
+      successElement.style.color = "black";
       form.reset();
+      window.location.href = "../index.html";
     })
     .catch((error) => {
-      errorElement.textContent =
-        error.message ||
-        "Registration failed. Please check your input and try again.";
+      errorElement.textContent = error.message;
       errorElement.style.color = "red";
-      successElement.textContent = "";
     });
-});
+  });

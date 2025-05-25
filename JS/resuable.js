@@ -1,13 +1,12 @@
 const hamburgerMenuButton = document.querySelector('.hamburger-menu-button');
 const hamburgerMenuImg = document.querySelector('.hamburger-menu-img');
-const hamburgerMenu = document.querySelector('.hamburger-menu');
 const displayAreaMenu = document.getElementById('displayAreaMenu')
 
-const hamburgerMenuImgSrc = '../PUBLIC/icons/hamburger-menu.png';
-const hamburgerMenuClosingImgSrc = '../PUBLIC/icons/close-icon.png'
+const hamburgerMenuImgSrc = 'https://i.imghippo.com/files/ZKh9355wo.png';
+const hamburgerMenuClosingImgSrc = 'https://i.imghippo.com/files/LwLs4715CSA.png'
 
 function isLoggedIn(){
-    return localStorage.getItem('accessToken') !== null;
+    return localStorage.getItem('authKey') !== null;
 }
 function updateView (htmlMenuContent){
     if(!displayAreaMenu) return;
@@ -29,8 +28,9 @@ function updateMenuBasedOnStatus(){
             if(logOutLink){
                 logOutLink.addEventListener('click', event =>{
                     event.preventDefault();
-                    localStorage.removeItem('authorazationKey');
+                    localStorage.removeItem('authKey');
                     closeToggleMenu();
+                    location.reload();
             });
         }
 } else {

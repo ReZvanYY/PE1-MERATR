@@ -1,76 +1,102 @@
-const getCurrentDate = () =>{
-    const date = new Date();
-    return date.toLocaleDateString();
+import { startingPosts } from "./blogStorage.js";
+const blogEndPoint = "https://v2.api.noroff.dev/blog/posts/foodie"
+const authKey = localStorage.getItem('authKey');
+
+if(!authKey){
+    console.error('Missing authKey');
+}
+const userOptions = () => {
+    return{
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${authKey}`,
+            'X-Noroff-API-Key': 'd21dfd62-d3dc-4e07-9987-cde61168ffb6',
+        }
+    };
+};
+
+const createPost = async (post) => {
+    try{
+        const res = await fetch(blogEndPoint, {
+            method: 'POST',
+            headers: userOptions().headers,
+            body: JSON.stringify(post),
+        });
+        const data = await res.json();
+
+        if(!res.ok){
+            console.error('Error creating post:', data);
+            throw new Error(data.message || 'Error creating post failed');
+        }
+        console.log('post created', data);
+    } catch(error){
+        console.error('Create post error', error.message);
+    }
+};
+
+const fetchAllPosts = async () => {
+    try{
+        const res = await fetch(blogEndPoint, userOptions());
+        const result = await res.json();
+
+        if(!res.ok){
+            throw new Error(result.message || `Failed to fetch posts: ${res.status}`);
+        }
+        return result.data || [];
+    }catch(err){
+        console.error('Fetch error:', err.meessage);
+        return [];
+    }
 }
 
-const postToBlog = async (blogData) => {
-  try {
-    const response = await fetch("https://v2.api.noroff.dev/blogs",
-    {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "Authorization": "",
-      },
-      body: JSON.stringify(blogData),
-    });
-    if (!response.ok) {
-      const errorData = await response.json();
-      throw new Error(
-        `Error ${response.status}: ${
-          errorData.message || "Failed to create the blog post!"
-        }`
-      );
+const removeDuplicates = async () => {
+    const posts = await fetchAllPosts();
+    const discovered = new Map();
+    const duplicates = [];
+
+    for(const post of posts){
+        const key = `${post.title?.trim().toLowerCase()}|${post.media?.url || ''}`;
+        if(discovered.has(key)){
+            duplicates.push(post.id);
+        } else {
+            discovered.set(key, post.id);
+        }
     }
-    const data = await response.json();
-    console.log("Blog post has been successfuly created:", data);
-    displayBlogPost(data);
-  } catch (error) {
-    console.error("Error creating the blog post", error.message);
-  }
-};
-const displayBlogPost = (blog) => {
-  const blogContainer = document.getElementById("latest-post-grid-layout");
-  const blogPostElement = document.createElement("article");
-  blogPostElement.className = "blog-post";
-  blogPostElement.innerHTML = `
-    <div class="blog-post-container">
-    <h2 class="blog-post-title">${blog.title}</h2>
-    <img src="#" alt="Blog post image of ....." class="blog-post-image">
-    <div class="blog-body-content>${blog.content}</div>
-    <p class="blog-post-created-date"><strong>Created</strong> ${blog.createdDate}</p>
-    <p class="blog-post-edited-date"><strong>Edited</strong>${blog.editedDate}</p>
-    </div>
-    `;
-  blogContainer.appendChild(blogPostElement);
+    for (const id of duplicates){
+        try{
+            const deleteRes = await fetch(`${blogEndPoint}/${id}`, {
+                method: 'DELETE',
+                headers: userOptions().headers,
+            });
+            if(!deleteRes.ok){
+                const erData = await deleteRes.json();
+                console.error(`Failed to delete ${id}`, erData.message);
+            } else {
+                console.log(`Deleted dup: ${id}`);
+            }
+        } catch(error){
+            console.error(`Error deleting ${id}:`, error.message);
+        }
+    }
 };
 
-const displayMultipleBlogPost = async (blogPosts) => {
-  for (const blog of blogPosts) {
-    try {
-      await postToBlog(blog);
-    } catch (error) {
-      console.error(
-        `Error creating the blog post: "${blog.title}";`,
-        error.message);
+const uploadNewPosts = async () => {
+    const existing = await fetchAllPosts();
+    const existingKeys = existing.map(
+        post => `${post.title?.trim().toLowerCase()}|${post.media?.url || ''}`
+    );
+    for (const post of startingPosts){
+        const key = `${post.title?.trim().toLowerCase()}|${post.media?.url || ''}`;
+
+        if(!existingKeys.includes(key)){
+            await createPost(post);
+        } else {
+            console.log(`post already exists: ${post.title}`);
+        }
     }
-  }
 };
 
-const blogPosts = [
-    {
-        "title": "Ash E Reshteh",
-        "content": `
-            <div class="title-container-box">
-            <h1 class="blog-post-thumbnail-title">${blog.title}<h1>
-            </div>
-            <img src="https://i.imgur.com/r2fUjnt.png" alt="a photo of the iranian herb nuddle soup called Ash E Reshteh" class="blog-post-thumbnail-image">
-        `,
-        "image": "https://i.imgur.com/r2fUjnt.png",
-        "createdDate": getCurrentDate(),
-        "editedDate": getCurrentDate(),
-
-    }
-];
-
-displayMultipleBlogPost(blogPosts);
+(async () => {
+    await removeDuplicates();
+    await uploadNewPosts();
+})();

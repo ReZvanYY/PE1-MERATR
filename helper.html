@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <a href="../HTML/blog-post-specific.html?id=${post.id}">
+    <h5 class="post-title">${post.title}</h5>
+    <img src="${post.media?.url}" alt="${post.media?.alt || post.title}" class="post-img">
+    </a>
+    
+</body>
+</html>
